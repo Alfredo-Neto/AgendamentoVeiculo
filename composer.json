@@ -1,0 +1,16 @@
+{
+    "name": "alfredobraule/agendamento-veiculo",
+    "license": "project",
+    "authors": [
+        {
+            "name": "Alfredo Braule",
+            "email": "alfredoneto934@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "AgVeiculo\\": "src/"
+        }
+    }
+}
