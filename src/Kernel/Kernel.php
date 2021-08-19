@@ -74,8 +74,7 @@ class Kernel
     private function loadRoute()
     {
         $rotas = [];
-        $rotas["POST"]["/login"] = ['AuthController', "login"];
-
+        $rotas["POST"]["/"] = ['VeiculoController', "index"];
         $this->rotas = $rotas;
     }
 
