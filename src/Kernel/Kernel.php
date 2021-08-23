@@ -17,6 +17,7 @@ class Kernel
             $this->setupDefaultErrorHandling();
             $this->setCorsHeaders();
             $this->handleRequest();
+            $this->bypassRoute();
             $this->loadRoute();
             $this->callController();
         } catch (\Throwable $e) {
@@ -71,10 +72,21 @@ class Kernel
         $this->request = $request;
     }
 
+    private function bypassRoute(){
+        $routeBypassConfig = [];
+        $routeBypassConfig["GET"]["/"] = "index.html";
+
+        if (isset($routeBypassConfig[$this->method][$this->uri]) ){
+            require_once $routeBypassConfig[$this->method][$this->uri];
+            exit();
+        }
+    }
+
     private function loadRoute()
     {
         $rotas = [];
-        $rotas["POST"]["/"] = ['VeiculoController', "index"];
+        $rotas["GET"]["/veiculos"] = ['VeiculosController', "index"];
+        $rotas["POST"]["/veiculos"] = ['VeiculosController', "create"];
         $this->rotas = $rotas;
     }
 
@@ -89,7 +101,7 @@ class Kernel
             file_put_contents('logRotas.html', "rota não encontra!" . '<br>', FILE_APPEND);
             $response = new JsonResponse(['mensagem' => 'rota não encontrada!'], 405);
         }
-        echo $response->process();
+        $response->process();
     }
 
     private function instanciaClasse($nomeDaClasse)

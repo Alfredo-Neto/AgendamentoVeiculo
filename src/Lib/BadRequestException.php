@@ -4,7 +4,7 @@ namespace AgVeiculo\Lib;
 
 use Exception;
 
-class AuthorizationException extends Exception
+class BadRequestException extends Exception
 {
     
 }

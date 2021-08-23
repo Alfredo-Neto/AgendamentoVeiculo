@@ -4,8 +4,11 @@ namespace  AgVeiculo\Controller;
 
 use Exception;
 use PDOException;
+use AgVeiculo\Lib\Validator;
+use AgVeiculo\Entity\Veiculo;
 use AgVeiculo\Lib\JsonResponse;
-use AgVeiculos\Lib\AuthorizationException;
+use AgVeiculo\Lib\BadRequestException;
+use AgVeiculo\Lib\AuthorizationException;
 use AgVeiculo\Repository\VeiculosRepository;
 
 class VeiculosController {
@@ -22,7 +25,7 @@ class VeiculosController {
 
             $veiculosEncontrados = $this->veiculosRepository->findAll($request->veiculoId);
 
-            return new JsonResponse(['movimentos' => $veiculosEncontrados], 200);
+            return new JsonResponse(['veiculos' => $veiculosEncontrados], 200);
 
         } catch (PDOException $e) {
             file_put_contents('log.txt', $e->getMessage() . '\n', FILE_APPEND);
@@ -37,16 +40,34 @@ class VeiculosController {
     public function create($request)
     {
        try {
-           if(!property_exists($request, 'name') || $request->name == null
-           || $request->name = ''){
-               throw new AuthorizationException("Por favor, informe o nome do veículo", 1);
-           }
+            $veiculo = $this->validaVeiculoCreate($request);
+            $this->veiculosRepository->create($veiculo);
+            return new JsonResponse(["mensagem => Veiculo inserido no banco com sucesso!"], 200);
+        } catch (BadRequestException $e) {
+            return new JsonResponse(['mensagem' => $e->getMessage()], 400);
+        } catch (PDOException $e) {
+            file_put_contents('log.txt', $e->getMessage() . '\n', FILE_APPEND);
+            return new JsonResponse (['mensagem' => 'Ocorreu um erro no banco de dados! Favor tente novamente!'], 500);
+        } catch (Exception $e) {
+            return new JsonResponse(['mensagem' => $e->getMessage()], 500);
+        }
+    }
 
-           
-           $veiculo = $this->veiculosRepository->create($request);
+    private function validaVeiculoCreate($request)
+    {
+        try {
+            $validator = new Validator();
+            $validator->setData($request);
+            $validator->exists('veiculoNome');
+            $validator->not('veiculoNome', 'null');
+            $validator->not('veiculoNome', 'empty');
 
-       } catch (\Throwable $th) {
-           //throw $th;
-       }
+            $veiculo = new Veiculo();
+            $veiculo->name = $request->veiculoNome;
+            return $veiculo;
+
+        } catch (Exception $e) {
+            throw new BadRequestException($e->getMessage(), 1);
+        }
     }
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        function criaVeiculo () {
+            let veiculoNome = document.getElementById('veiculoNome');
+            veiculoNome = veiculoNome.value;
+
+            let json = JSON.stringify({'veiculoNome': veiculoNome});
+
+            fetch('/veiculos',{
+                method: "POST",
+                body: json
+            }).then(async response => {
+                let text = await response.text();
+                data = JSON.parse(text);
+                console.log('data', data);
+                listaVeiculos();
+            });
+        }
+
+        function listaVeiculos () {
+            fetch('/veiculos',{
+                method: "GET",
+            }).then(async response => {
+                let text = await response.text();
+                data = JSON.parse(text);
+                console.log('data', data);
+
+                let veiculos = data.mensagem.veiculos;
+                let listaVeiculos = document.getElementById('listaVeiculos');
+                let veiculosString = '';
+                veiculos.forEach(element => {
+                    console.log('element',element); 
+                    veiculosString += '<br>' + element.name;
+                });
+                listaVeiculos.innerHTML = veiculosString;
+            });
+        }
+
+        listaVeiculos();
+    </script>
+
+    <input type="text" name="veiculoNome" id="veiculoNome">
+    <button type="button" onclick="criaVeiculo()">Criar</button>
+
+    <div id="listaVeiculos"></div>
+</body>
+</html>

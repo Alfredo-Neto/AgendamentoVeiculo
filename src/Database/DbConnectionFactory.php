@@ -16,7 +16,7 @@ class DbConnectionFactory {
         $pdo = new PDO(
             'pgsql:host='
             . self::$host
-            . ';port=' . self::$port . '.dbname=' . self::$name . ';user='
+            . ';port=' . self::$port . ';dbname=' . self::$name . ';user='
             . self::$user . ';password=' . self::$password);
 
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
