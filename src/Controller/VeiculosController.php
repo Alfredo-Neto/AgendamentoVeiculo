@@ -42,7 +42,7 @@ class VeiculosController {
        try {
             $veiculo = $this->validaVeiculoCreate($request);
             $this->veiculosRepository->create($veiculo);
-            return new JsonResponse(["mensagem => Veiculo inserido no banco com sucesso!"], 200);
+            return new JsonResponse(['mensagem' => 'Veiculo inserido no banco com sucesso!'], 201);
         } catch (BadRequestException $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 400);
         } catch (PDOException $e) {
@@ -64,6 +64,9 @@ class VeiculosController {
 
             $veiculo = new Veiculo();
             $veiculo->name = $request->veiculoNome;
+            $veiculo->descricao = $request->veiculoDescricao;
+            $veiculo->preco = $request->veiculoPreco;
+            $veiculo->local = $request->veiculoLocal;
             return $veiculo;
 
         } catch (Exception $e) {

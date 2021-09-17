@@ -98,10 +98,10 @@ class Kernel
             $meuController = $this->instanciaClasse($this->rotas[$this->method][$this->uri][0]);
             $response = $this->executaMetodo($meuController, $this->rotas[$this->method][$this->uri][1], [$this->request]);
         } else {
-            file_put_contents('logRotas.html', "rota não encontra!" . '<br>', FILE_APPEND);
+            file_put_contents('logRotas.html', "rota não encontrada!" . '<br>', FILE_APPEND);
             $response = new JsonResponse(['mensagem' => 'rota não encontrada!'], 405);
         }
-        $response->process();
+       echo $response->process();
     }
 
     private function instanciaClasse($nomeDaClasse)

@@ -5,4 +5,5 @@ LINE 1: SELECT * FROM Veiculos where veiculo_id = $1
                                      ^\nSQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "veiculos_name_key"
 DETAIL:  Key (name)=(CRV) already exists.\nSQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "veiculos_name_key"
 DETAIL:  Key (name)=(Argo) already exists.\nSQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "veiculos_name_key"
-DETAIL:  Key (name)=(Sportage) already exists.\n
+DETAIL:  Key (name)=(Sportage) already exists.\nSQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column "preco" violates not-null constraint
+DETAIL:  Failing row contains (1, fiat uno, null, null, null).\n

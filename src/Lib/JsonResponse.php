@@ -13,7 +13,7 @@ class JsonResponse
     public function process()
     {
         http_response_code($this->code);
-        echo json_encode([
+        return json_encode([
             "mensagem" => $this->data
         ]);
     }

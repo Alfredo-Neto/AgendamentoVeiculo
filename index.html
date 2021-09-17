@@ -4,53 +4,105 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Document</title>
 </head>
 <body>
 
     <script>
         function criaVeiculo () {
-            let veiculoNome = document.getElementById('veiculoNome');
-            veiculoNome = veiculoNome.value;
+            let veiculoNome = document.getElementById('veiculoNome').value;
+            let veiculoDescricao = document.getElementById('veiculoDescricao').value;
+            let veiculoPreco = document.getElementById('veiculoPreco').value;
+            let veiculoLocal = document.getElementById('veiculoLocal').value;
 
-            let json = JSON.stringify({'veiculoNome': veiculoNome});
+            let json = {};
 
-            fetch('/veiculos',{
+            json = JSON.stringify(
+                {
+                    'veiculoNome': veiculoNome,
+                    'veiculoDescricao': veiculoDescricao,
+                    'veiculoPreco': veiculoPreco,
+                    'veiculoLocal': veiculoLocal
+                }
+            );
+            fetch('http://localhost:8000/veiculos',{
                 method: "POST",
                 body: json
             }).then(async response => {
-                let text = await response.text();
+                const text = await response.text();
+                
+                console.log('Debug antes de conveter', text);
                 data = JSON.parse(text);
-                console.log('data', data);
-                listaVeiculos();
-            });
+                console.log('debug do Objeto data', data);
+
+                if (response.ok) {
+                    alert('Deu certo!');
+                    console.log(data.mensagem.mensagem);
+                    listaVeiculos();
+                }
+            })
         }
 
         function listaVeiculos () {
-            fetch('/veiculos',{
+            fetch('http://localhost:8000/veiculos',{
                 method: "GET",
             }).then(async response => {
                 let text = await response.text();
                 data = JSON.parse(text);
                 console.log('data', data);
-
+                let html = "";
                 let veiculos = data.mensagem.veiculos;
                 let listaVeiculos = document.getElementById('listaVeiculos');
                 let veiculosString = '';
                 veiculos.forEach(element => {
-                    console.log('element',element); 
-                    veiculosString += '<br>' + element.name;
+                    console.log('element',element);
+                     html += `<tr> 
+                        <td>${element.id}</td>
+                        <td>${element.name}</td>
+                        <td>${element.descricao}</td>
+                        <td>${element.preco}</td>
+                        <td>${element.local}</td>
+                    </tr>`;
                 });
-                listaVeiculos.innerHTML = veiculosString;
+                console.log(html);
+                listaVeiculos.innerHTML = `<table class="table">${html}</table>`;
             });
+        }
+
+        function toggleForm() {
+            let form = document.getElementById('form');
+            if(form.classList.contains('hidden')){
+                form.classList.remove('hidden');
+            } else {
+                form.classList.add('hidden');
+            }
         }
 
         listaVeiculos();
     </script>
 
-    <input type="text" name="veiculoNome" id="veiculoNome">
-    <button type="button" onclick="criaVeiculo()">Criar</button>
+    <div class="container">
+   
+        <button class="btn" onclick="toggleForm()">Novo Veiculo</button>
 
-    <div id="listaVeiculos"></div>
+        <form id="form" action="index.php" method="post" class="form hidden">
+            <label for="veiculoNome">Nome:</label>
+            <input type="text" name="veiculoNome" id="veiculoNome">
+
+            <label for="veiculoDescricao">Descrição:</label>
+            <input type="text" name="veiculoDescricao" id="veiculoDescricao">
+
+            <label for="veiculoPreco">Preço:</label>
+            <input type="text" name="veiculoPreco" id="veiculoPreco">
+
+            <label for="veiculoLocal">Local:</label>
+            <input type="text" name="veiculoLocal" id="veiculoLocal">
+
+            <button type="button" onclick="criaVeiculo()">Criar</button>
+        </form>
+    </div>
+    
+    <div id="listaVeiculos" class="flex-row" style="justify-content: center;"></div>
 </body>
 </html>
