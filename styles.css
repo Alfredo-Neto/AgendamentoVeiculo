@@ -29,13 +29,16 @@ body {
     margin-bottom: 5px;
 }
 
+.form input {
+    outline: none;
+}
+
 .btn {
     background: #ff0657;
     border: 0px;
     height: 25px;
-    width: 100%;
+    width: 100px;
     margin: 5px 0 5px;
-    max-width: 400px;
     cursor: pointer;
     border-radius: 5px;
     color: #fff;
