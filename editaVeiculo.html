@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="container">
+        <form id="form" action="index.php" method="post" class="form">
+            <label for="veiculoNome">Nome:</label>
+            <input type="text" name="veiculoNome" id="veiculoNome">
+
+            <label for="veiculoDescricao">Descrição:</label>
+            <input type="text" name="veiculoDescricao" id="veiculoDescricao">
+
+            <label for="veiculoPreco">Preço:</label>
+            <input type="text" name="veiculoPreco" id="veiculoPreco">
+
+            <label for="veiculoLocal">Local:</label>
+            <input type="text" name="veiculoLocal" id="veiculoLocal">
+
+            <button type="button" onclick="updateVeiculo()">Editar</button>
+        </form>
+    </div>
+    
+    <div id="listaVeiculos" class="flex-row" style="justify-content: center;"></div>
+
+
+    <script>
+        function updateVeiculo () {
+
+            let veiculoNome = document.getElementById('veiculoNome').value;
+            let veiculoDescricao = document.getElementById('veiculoDescricao').value;
+            let veiculoPreco = document.getElementById('veiculoPreco').value;
+            let veiculoLocal = document.getElementById('veiculoLocal').value;
+
+            let json = {};
+
+            json = JSON.stringify(
+                {
+                    'veiculoNome': veiculoNome,
+                    'veiculoDescricao': veiculoDescricao,
+                    'veiculoPreco': veiculoPreco,
+                    'veiculoLocal': veiculoLocal
+                }
+            );
+            fetch('http://localhost:8000/veiculos', { //http://localhost:8000/veiculos?veiculoId=${veiculoId}
+                method: "PUT",
+                body: json
+            })
+            .then(async(response) => {
+                let text = await response.text();
+                try {
+                    console.log('Debug antes de converter: ', text);
+                    let data = JSON.parse(text);
+                    console.log('Debug do objeto data ', data);
+
+                    if(response.ok) {
+                        alert('Dados editados com sucesso!');
+                        console.log(data.mensagem.mensagem);
+                        loadVeiculo();
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+            .catch((error) => console.log(error));
+        }
+
+        function getVeiculoID () {
+            const parametrosUrl = new URLSearchParams(location.search);
+            const veiculoId = parametrosUrl.get('veiculoId');
+            return veiculoId;
+        }
+
+        async function loadVeiculo () {
+            let veiculoId = getVeiculoID();
+            let veiculo = null;
+            await fetch(`http://localhost:8000/veiculos?veiculoId=${veiculoId}`,{
+                method: "GET",
+            }).then(async response => {
+                let text = await response.text();
+                data = JSON.parse(text);
+                console.log('data', data);
+                veiculo = data.mensagem.veiculos[0];
+            });
+            return veiculo;
+        }
+
+        async function preencheFormVeiculo(veiculo) {
+            console.log('veiculo',veiculo);
+            let inputveiculoNome = document.getElementById('veiculoNome');
+            inputveiculoNome.value = veiculo.name;
+        }
+
+        loadVeiculo().then(veiculo => {
+            preencheFormVeiculo(veiculo);
+        })
+    </script>
+</body>
+</html>

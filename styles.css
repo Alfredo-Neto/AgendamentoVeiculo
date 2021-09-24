@@ -51,6 +51,10 @@ body {
     background: #FF2D71;
 }
 
+.btn:focus, .btn:active {
+    outline: none;
+}
+
 .form.hidden {
     display:none;
 }

@@ -44,6 +44,10 @@
             })
         }
 
+        function editaVeiculos(veiculoId) {
+            window.location.href = "editaVeiculo.html?veiculoId=" + veiculoId;
+        }
+
         function listaVeiculos () {
             fetch('http://localhost:8000/veiculos',{
                 method: "GET",
@@ -56,13 +60,14 @@
                 let listaVeiculos = document.getElementById('listaVeiculos');
                 let veiculosString = '';
                 veiculos.forEach(element => {
-                    console.log('element',element);
+                    console.log('element', element);
                      html += `<tr> 
                         <td>${element.id}</td>
                         <td>${element.name}</td>
                         <td>${element.descricao}</td>
                         <td>${element.preco}</td>
                         <td>${element.local}</td>
+                        <td><button type="button" onClick=editaVeiculos(${element.id})>Editar</button></td>
                     </tr>`;
                 });
                 console.log(html);

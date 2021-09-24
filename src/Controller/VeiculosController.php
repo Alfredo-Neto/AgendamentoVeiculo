@@ -23,7 +23,8 @@ class VeiculosController {
     {
         try {
 
-            $veiculosEncontrados = $this->veiculosRepository->findAll($request->veiculoId);
+            $veiculosEncontrados = $this->veiculosRepository
+                ->findAll(property_exists($request,'veiculoId') ? $request->veiculoId : null);
 
             return new JsonResponse(['veiculos' => $veiculosEncontrados], 200);
 
@@ -51,6 +52,23 @@ class VeiculosController {
         } catch (Exception $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 500);
         }
+    }
+
+    public function update($request)
+    {
+        try {
+            $veiculo = $this->validaVeiculoCreate($request);
+            $this->veiculosRepository->update($veiculo);
+            return new JsonResponse(['mensagem' => 'veiculo atualizado com sucesso!'], 200);
+        } catch (BadRequestException $e) {
+            return new JsonResponse(['mensagem' => $e->getMessage()], 400);
+        } catch (PDOException $e) {
+            file_put_contents('log.txt', $e->getMessage() . '\n', FILE_APPEND);
+            return new JsonResponse(['mensagem' => 'Ocorreu um erro no banco de dados! Favor tente novamente!'], 500);
+        }catch (Exception $e) {
+            return new JsonResponse(['mensagem' => $e->getMessage()], 500);
+        }
+        
     }
 
     private function validaVeiculoCreate($request)
