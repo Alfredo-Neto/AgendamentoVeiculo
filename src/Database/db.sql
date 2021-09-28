@@ -5,6 +5,7 @@ CREATE TABLE Veiculos (
     name varchar(255) NOT NULL,
     descricao varchar(255),
     preco numeric(20,2) NOT NULL,
+    imagePath varchar(255),
     local varchar(255),
     CONSTRAINT PK_Veiculos PRIMARY KEY (ID)
 );

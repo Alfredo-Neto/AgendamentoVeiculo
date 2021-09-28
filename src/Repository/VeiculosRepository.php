@@ -44,12 +44,22 @@ class VeiculosRepository {
     {
         $pdo = DbConnectionFactory::get();
         $sql = "update Veiculos set name = :name, descricao = :descricao
-        , preco = :preco, local = :local";
+        , preco = :preco, local = :local where id = :id";
         $statement = $pdo->prepare($sql);
+        $statement->bindValue(":id", $veiculo->id);
         $statement->bindValue(":name", $veiculo->name);
         $statement->bindValue(":descricao", $veiculo->descricao);
         $statement->bindValue(":preco", $veiculo->preco);
         $statement->bindValue(":local", $veiculo->local);
+        $statement->execute();
+    }
+
+    public function storeImagePath($veiculo) {
+        $pdo = DbConnectionFactory::get();
+        $sql = "update Veiculos set imagePath = :imagePath where id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(":id", $veiculo->id);
+        $statement->bindValue(":imagePath", $veiculo->imagePath);
         $statement->execute();
     }
 }

@@ -61,8 +61,10 @@
                 let veiculosString = '';
                 veiculos.forEach(element => {
                     console.log('element', element);
+                    console.log('image', element.imagepath);
                      html += `<tr> 
                         <td>${element.id}</td>
+                        <td><img src="${element.imagepath}"></td>
                         <td>${element.name}</td>
                         <td>${element.descricao}</td>
                         <td>${element.preco}</td>

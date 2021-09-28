@@ -11,6 +11,14 @@
     
     <div class="container">
         <form id="form" action="index.php" method="post" class="form">
+
+            <h1>Continuar o método updateImage no controller</h1>
+
+            <label for="myfile">Selecione uma imagem:</label>
+            <input type="file" id="myfile" name="myfile"><br><br>
+
+            <button type="button" onclick="uploadImage()">enviar imagem</button>
+
             <label for="veiculoNome">Nome:</label>
             <input type="text" name="veiculoNome" id="veiculoNome">
 
@@ -38,6 +46,8 @@
             let veiculoPreco = document.getElementById('veiculoPreco').value;
             let veiculoLocal = document.getElementById('veiculoLocal').value;
 
+            let veiculoId = getVeiculoID();
+
             let json = {};
 
             json = JSON.stringify(
@@ -48,7 +58,7 @@
                     'veiculoLocal': veiculoLocal
                 }
             );
-            fetch('http://localhost:8000/veiculos', { //http://localhost:8000/veiculos?veiculoId=${veiculoId}
+            fetch(`http://localhost:8000/veiculos?veiculoId=${veiculoId}`, { //http://localhost:8000/veiculos?veiculoId=${veiculoId}
                 method: "PUT",
                 body: json
             })
@@ -69,6 +79,41 @@
                 }
             })
             .catch((error) => console.log(error));
+        }
+
+
+
+
+        function uploadImage()
+        {
+            let veiculoId = getVeiculoID();
+            let input = document.querySelector('input[type="file"]')
+
+            let data = new FormData()
+            // files é uma propriedade do elemento input que retorna um FileList, que é um array de objetos File
+            data.append('file', input.files[0]); // objeto File no index 0
+
+            fetch(`http://localhost:8000/veiculos/image?veiculoId=${veiculoId}`, {
+                method: "post",
+                body: data
+            })
+            .then(async(response) => {
+                let text = await response.text();
+                try {
+                    console.log("debug antes de converter ", text);
+                    let objetoJS = JSON.parse(text);
+                    console.log("Debug do objeto ", objetoJS);
+
+                    if(response.ok) {
+                        alert("Imagem inserida com sucesso!");
+                        console.log(objetoJS.data.mensagem);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+            .catch((error) => console.error(error));
+
         }
 
         function getVeiculoID () {
