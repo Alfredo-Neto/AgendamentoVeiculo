@@ -10,4 +10,12 @@ CREATE TABLE Veiculos (
     CONSTRAINT PK_Veiculos PRIMARY KEY (ID)
 );
 
+CREATE TABLE Agendamento (
+    id serial NOT NULL UNIQUE,
+    datahora timestamp,
+    veiculoId bigint,
+    CONSTRAINT PK_Agendamento PRIMARY KEY (ID),
+    CONSTRAINT FK_AgendamentoVeiculo FOREIGN KEY (veiculoId) REFERENCES Veiculos (id)
+);
+
 select * from Veiculos;
