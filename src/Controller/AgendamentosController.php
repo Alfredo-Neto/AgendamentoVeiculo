@@ -2,13 +2,14 @@
 
 namespace AgVeiculo\Controller;
 
+use AgVeiculo\Entity\Agendamento;
 use AgVeiculo\Lib\JsonResponse;
 use AgVeiculo\Repository\AgendamentosRepository;
 use AgVeiculo\Lib\BadRequestException;
 use Exception;
 use PDOException;
 
-class AgendamentoController
+class AgendamentosController
 {
     private AgendamentosRepository $agendamentosRepository;
 
@@ -20,7 +21,10 @@ class AgendamentoController
     public function create($request)
     {
         try {
-            $agendamento = $this->agendamentosRepository->create($request);
+            $agendamento = new Agendamento();
+            $agendamento->dataHora = $request->dataHora;
+            $agendamento->veiculoId = $request->veiculoId;
+            $agendamento = $this->agendamentosRepository->create($agendamento);
             return new JsonResponse(['mensagem' => 'Agendamento cadastrado com sucesso!'], 201);
         } catch (BadRequestException $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 400);

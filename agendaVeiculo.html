@@ -7,6 +7,63 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <form action="index.php">
+        <label for="data"></label>
+        <input type="date" id="data">
+        <label for="hora"></label>
+        <input type="text" id="hora">
+        <button type="button" onclick="agendaVeiculo()">Agendar Visita</button>
+        
+        <div id="veiculos-agendados"></div>
+    </form>
+
+    <script>
+        function agendaVeiculo() {
+            let data = document.getElementById('data').value;
+            let hora = document.getElementById('hora').value;
+
+            let veiculoId = getVeiculoID();
+
+            let dataHora = data.concat(' ', hora);
+
+            let json = {};
+
+            json = JSON.stringify(
+                {
+                    'dataHora': dataHora,
+                    'veiculoId': veiculoId
+                }
+            );
+            fetch('http://localhost:8000/agendamentos', {
+                method: "post",
+                body: json
+            })
+            .then(async(response) => {
+                let text = await response.text();
+                try {
+                    console.log('Debug antes de converter: ', text);
+                    data = JSON.parse(text);
+                    console.log('Debug do objeto: ', data);
+
+                    if(response.ok) {
+                        alert('agendamento feito com sucesso!');
+                        console.log(data.mensagem.mensagem);
+                        // listaAgendamentos();
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+            .catch((error) => console.error(error));
+        }
+
+        function getVeiculoID() {
+            const parametrosUrl = new URLSearchParams(location.search);
+            veiculoId = parametrosUrl.get('veiculoId');
+            return veiculoId;
+        }
+        
+
+    </script>
 </body>
 </html>

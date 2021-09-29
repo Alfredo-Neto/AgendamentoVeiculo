@@ -6,4 +6,5 @@ class Agendamento
 {
     public $id;
     public $dataHora;
+    public $veiculoId;
 }

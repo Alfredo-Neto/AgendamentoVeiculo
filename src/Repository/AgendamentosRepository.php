@@ -8,12 +8,13 @@ class AgendamentosRepository
 {
     public function create($agendamento)
     {
+        var_dump($agendamento);
         $pdo = DbConnectionFactory::get();
-        $sql = "INSERT INTO Agendamento(datahora, veiculoId)
+        $sql = "INSERT INTO Agendamento( datahora, veiculoId)
         VALUES(:datahora, :veiculoId)";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":datahora", $agendamento->dataHora);
-        $statement->bindValue(":veiculoId", $agendamento->id);
+        $statement->bindValue(":veiculoId", $agendamento->veiculoId);
         $statement->execute();
     }
 }

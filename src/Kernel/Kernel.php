@@ -89,6 +89,7 @@ class Kernel
         $rotas["POST"]["/veiculos"] = ['VeiculosController', "create"];
         $rotas["PUT"]["/veiculos"] = ['VeiculosController', "update"];
         $rotas["POST"]["/veiculos/image"] = ['VeiculosController', "updateImage"];
+        $rotas["POST"]["/agendamentos"] = ['AgendamentosController', "create"];
         $this->rotas = $rotas;
     }
 
