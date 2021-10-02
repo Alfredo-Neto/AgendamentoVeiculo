@@ -41,7 +41,9 @@ class AgendamentosController
             $agendamento = new Agendamento();
             $agendamento->dataHora = $request->dataHora;
             $agendamento->veiculoId = $request->veiculoId;
+
             $agendamento = $this->agendamentosRepository->create($agendamento);
+            
             return new JsonResponse(['mensagem' => 'Agendamento cadastrado com sucesso!'], 201);
         } catch (BadRequestException $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 400);

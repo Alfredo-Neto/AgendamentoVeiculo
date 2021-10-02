@@ -21,12 +21,12 @@ class AgendamentosRepository
         if ($veiculoId != null) {
             $statement->bindValue(":veiculoId", $veiculoId);
         }
-        
+
         $statement->execute();
         $veiculosAgendados = $statement->fetchAll(PDO::FETCH_OBJ);
         return $veiculosAgendados;
     }
-
+    
     public function create($agendamento)
     {
         var_dump($agendamento);
