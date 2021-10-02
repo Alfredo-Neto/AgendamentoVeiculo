@@ -48,7 +48,7 @@
                     if(response.ok) {
                         alert('agendamento feito com sucesso!');
                         console.log(data.mensagem.mensagem);
-                        // listaAgendamentos();
+                        listaAgendamentosVeiculos();
                     }
                 } catch (error) {
                     console.log(error);
@@ -62,8 +62,51 @@
             veiculoId = parametrosUrl.get('veiculoId');
             return veiculoId;
         }
-        
 
+        function listaAgendamentosVeiculos()
+        {
+            fetch('http://localhost:8000/agendamentos', {
+                method: "get"
+            })
+            .then(async(response) => {
+                let text = await response.text();
+                try {
+                    console.log('Debug antes de converter: ', text);
+                    data = JSON.parse(text);
+                    console.log('Debug do objeto data: ', data);
+
+                    if (response.ok){
+                        alert('Deu certo!');
+                        console.log(data.mensagem.veiculos);
+                        renderVeiculosAgendados(data.mensagem.veiculos);
+                    } else {
+                        console.log(data.mensagem.mensagem);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+            .catch((error) => console.error(error));
+        }
+
+        function renderVeiculosAgendados(veiculos) {
+            let html = "";
+            veiculosAgendados = document.getElementById('veiculos-agendados');
+            veiculos.forEach((element) => {
+                console.log('element: ', element);
+                html += `<tr>
+                        <td>${element.name}</td>
+                        <td>${element.descricao}</td>
+                        <td>${element.preco}</td>
+                        <td>${element.local}</td>
+                    </tr>`;
+            });
+            console.log(html);
+            veiculos.innerHTML = `<table class="table">${html}</table>`;
+        }
+
+        listaAgendamentosVeiculos();
+        
     </script>
 </body>
 </html>

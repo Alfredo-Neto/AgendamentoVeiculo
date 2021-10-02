@@ -48,6 +48,10 @@
             window.location.href = "editaVeiculo.html?veiculoId=" + veiculoId;
         }
 
+        function agendaVeiculos(veiculoId) {
+            window.location.href = "agendaVeiculo.html?veiculoId=" + veiculoId;
+        }
+
         function listaVeiculos () {
             fetch('http://localhost:8000/veiculos',{
                 method: "GET",
@@ -69,6 +73,7 @@
                         <td>${element.descricao}</td>
                         <td>${element.preco}</td>
                         <td>${element.local}</td>
+                        <td><button type="button" onClick=agendaVeiculos(${element.id})>Agendar</button></td>
                         <td><button type="button" onClick=editaVeiculos(${element.id})>Editar</button></td>
                     </tr>`;
                 });

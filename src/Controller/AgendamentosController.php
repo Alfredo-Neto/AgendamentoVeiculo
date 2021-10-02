@@ -17,6 +17,11 @@ class AgendamentosController
     {
         $this->agendamentosRepository = new AgendamentosRepository();
     }
+
+    public function index($request)
+    {
+        
+    }
     
     public function create($request)
     {
