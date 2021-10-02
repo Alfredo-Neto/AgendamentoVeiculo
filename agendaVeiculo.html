@@ -93,6 +93,9 @@
         function renderVeiculosAgendados(veiculos) {
             let html = "";
             veiculosAgendados = document.getElementById('veiculos-agendados');
+            html = `<td>Id</td>
+                    <td>Data e Hora</td>
+                    <td>Id do Veículo</td>`
             veiculos.forEach((element) => {
                 console.log('element: ', element);
                 html += `<tr>
