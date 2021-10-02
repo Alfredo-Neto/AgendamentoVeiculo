@@ -18,6 +18,10 @@
         <div id="veiculos-agendados"></div>
     </form>
 
+    <h3>1 - lista de veiculos agendados não carrega/renderiza ao criar um novo agendamento;</h3>
+    <h3>2 - implementar mensagem de erro caso alguem tente agendar o mesmo veiculo no mesmo horário, do mesmo dia;</h3>
+    <h3>3 - todos os veiculos agendados estão aparecendo em todas as listas, ao inves de cada veiculo ter sua própria lista de agendamentos.</h3>
+
     <script>
         function agendaVeiculo() {
             let data = document.getElementById('data').value;
@@ -67,7 +71,8 @@
         function listaAgendamentosVeiculos()
         {
             fetch('http://localhost:8000/agendamentos', {
-                method: "get"
+                method: "get",
+                body: null
             })
             .then(async(response) => {
                 let text = await response.text();
