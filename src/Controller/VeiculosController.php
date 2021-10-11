@@ -84,9 +84,6 @@ class VeiculosController
                 throw new Exception("Possível ataque de upload de arquivo!");
             }
             
-            echo 'Aqui está mais informações de debug:';
-            print_r($_FILES);
-
             $veiculo = $this->validaVeiculoId($request);
 
             $veiculo->imagePath = $uploadfile;

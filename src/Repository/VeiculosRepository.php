@@ -7,6 +7,17 @@ use AgVeiculo\Database\DbConnectionFactory;
 
 class VeiculosRepository {
 
+    public function find($id)
+    {
+        $pdo = DbConnectionFactory::get();
+        $sql = "SELECT * FROM Veiculos where id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(":id", $id);
+        $statement->execute();
+        $veiculos = $statement->fetch(PDO::FETCH_OBJ);
+        return $veiculos;
+    }
+
     public function findAll($veiculoId = null)
     {
         $filter = '';

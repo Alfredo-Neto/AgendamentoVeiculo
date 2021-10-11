@@ -18,10 +18,6 @@
         <div id="veiculos-agendados"></div>
     </form>
 
-    <h3>1 - lista de veiculos agendados não carrega/renderiza ao criar um novo agendamento;</h3>
-    <h3>2 - implementar mensagem de erro caso alguem tente agendar o mesmo veiculo no mesmo horário, do mesmo dia;</h3>
-    <h3>3 - todos os veiculos agendados estão aparecendo em todas as listas, ao inves de cada veiculo ter sua própria lista de agendamentos.</h3>
-
     <script>
         function agendaVeiculo() {
             let data = document.getElementById('data').value;
@@ -50,9 +46,10 @@
                     data = JSON.parse(text);
                     console.log('Debug do objeto: ', data);
 
+                    alert(data.mensagem.mensagem);
+                    console.log(data.mensagem.mensagem);
+
                     if(response.ok) {
-                        alert('agendamento feito com sucesso!');
-                        console.log(data.mensagem.mensagem);
                         listaAgendamentosVeiculos();
                     }
                 } catch (error) {
@@ -70,7 +67,8 @@
 
         function listaAgendamentosVeiculos()
         {
-            fetch('http://localhost:8000/agendamentos', {
+            let veiculoId = getVeiculoID();
+            fetch(`http://localhost:8000/agendamentos?veiculoId=${veiculoId}&getFull=true`, {
                 method: "get",
                 body: null
             })
@@ -82,9 +80,8 @@
                     console.log('Debug do objeto data Lista:', data);
 
                     if (response.ok){
-                        alert('Deu certo!');
-                        console.log(data.mensagem.veiculos);
-                        renderVeiculosAgendados(data.mensagem.veiculos);
+                        console.log(data.mensagem.agendamentos);
+                        renderVeiculosAgendados(data.mensagem.agendamentos);
                     } else {
                         console.log(data.mensagem.mensagem);
                     }
@@ -100,13 +97,13 @@
             veiculosAgendados = document.getElementById('veiculos-agendados');
             html = `<td>Id</td>
                     <td>Data e Hora</td>
-                    <td>Id do Veículo</td>`
+                    <td>Veículo</td>`
             veiculos.forEach((element) => {
                 console.log('element: ', element);
                 html += `<tr>
                         <td>${element.id}</td>
-                        <td>${element.datahora}</td>
-                        <td>${element.veiculoid}</td>
+                        <td>${element.dataHora}</td>
+                        <td>${element.veiculo.name}</td>
                     </tr>`;
             });
             console.log(html);
