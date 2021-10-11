@@ -66,7 +66,7 @@ class AgendamentosController
             $agendamentosExistentes = $this->agendamentosRepository->findAll($agendamento->veiculoId);
 
             foreach ($agendamentosExistentes as $key => $AgExistente) {
-                if($AgExistente->datahora == $agendamento->dataHora) {
+                if($AgExistente->dataHora == $agendamento->dataHora) {
                     throw new \Exception("Não é possível agendar neste horário, ja esta ocupado.", 1);
                 }
             }
