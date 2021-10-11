@@ -8,6 +8,7 @@ use AgVeiculo\Lib\JsonResponse;
 use AgVeiculo\Repository\AgendamentosRepository;
 use AgVeiculo\Lib\BadRequestException;
 use AgVeiculo\Repository\VeiculosRepository;
+use AgVeiculo\Lib\Validator;
 use Exception;
 use PDOException;
 
@@ -59,6 +60,9 @@ class AgendamentosController
             $agendamento->dataHora = $data->format('Y-m-d H:i:s');
             $agendamento->veiculoId = $request->veiculoId;
 
+            // Validar dados do usuário: nome, email e telefone
+            
+
             /*
             verificar se para esse veiculo
             existe agendamento no mesmo dia/hora
@@ -80,6 +84,27 @@ class AgendamentosController
             file_put_contents('log.txt', $e->getMessage() . '\n', FILE_APPEND);
         } catch (Exception $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 500);
+        }
+    }
+
+    private function validaVeiculoCreate($request)
+    {
+        try {
+            $validator = new Validator();
+            $validator->setData($request);
+            $validator->exists('veiculoNome');
+            $validator->not('veiculoNome', 'null');
+            $validator->not('veiculoNome', 'empty');
+
+            $agendamento = new Agendamento();
+            $agendamento->veiculoId = $request->veiculoId;
+            $agendamento->name = $request->nome;
+            $agendamento->email = $request->email;
+            $agendamento->dataHora = $request->dataHora;
+            $agendamento->telefone = $request->telefone;
+            return $agendamento;
+        } catch (Exception $e) {
+            throw new BadRequestException($e->getMessage(), 1);
         }
     }
 }

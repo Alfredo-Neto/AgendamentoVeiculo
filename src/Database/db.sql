@@ -13,6 +13,9 @@ CREATE TABLE Veiculos (
 CREATE TABLE Agendamento (
     id serial NOT NULL UNIQUE,
     datahora timestamp,
+    nome varchar(255),
+    email varchar(255),
+    telefone int,
     veiculoId bigint,
     CONSTRAINT PK_Agendamento PRIMARY KEY (ID),
     CONSTRAINT FK_AgendamentoVeiculo FOREIGN KEY (veiculoId) REFERENCES Veiculos (id)
