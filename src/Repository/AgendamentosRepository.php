@@ -44,11 +44,14 @@ class AgendamentosRepository
     public function create($agendamento)
     {
         $pdo = DbConnectionFactory::get();
-        $sql = "INSERT INTO Agendamento( datahora, veiculoId)
-        VALUES(:datahora, :veiculoId)";
+        $sql = "INSERT INTO Agendamento( datahora, veiculoId, nome, email, telefone)
+        VALUES(:datahora, :veiculoId, :nome, :email, :telefone)";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":datahora", $agendamento->dataHora);
         $statement->bindValue(":veiculoId", $agendamento->veiculoId);
+        $statement->bindValue(":nome", $agendamento->name);
+        $statement->bindValue(":email", $agendamento->email);
+        $statement->bindValue(":telefone", $agendamento->telefone);
         $statement->execute();
     }
 

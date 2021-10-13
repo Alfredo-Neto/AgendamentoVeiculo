@@ -12,6 +12,7 @@ use AgVeiculo\Lib\Validator;
 use Exception;
 use PDOException;
 
+
 class AgendamentosController
 {
     private AgendamentosRepository $agendamentosRepository;
@@ -54,19 +55,10 @@ class AgendamentosController
     
     public function create($request)
     {
-        try {
-            $agendamento = new Agendamento();
-            $data = new \Datetime($request->dataHora);
-            $agendamento->dataHora = $data->format('Y-m-d H:i:s');
-            $agendamento->veiculoId = $request->veiculoId;
+        try {       
 
-            // Validar dados do usuário: nome, email e telefone
-            
+            $agendamento = $this->validaAgendamentoCreate($request);
 
-            /*
-            verificar se para esse veiculo
-            existe agendamento no mesmo dia/hora
-            */
             $agendamentosExistentes = $this->agendamentosRepository->findAll($agendamento->veiculoId);
 
             foreach ($agendamentosExistentes as $key => $AgExistente) {
@@ -82,25 +74,33 @@ class AgendamentosController
             return new JsonResponse(['mensagem' => $e->getMessage()], 400);
         } catch (PDOException $e) {
             file_put_contents('log.txt', $e->getMessage() . '\n', FILE_APPEND);
+            return new JsonResponse(['mensagem' => $e->getMessage()], 500);
         } catch (Exception $e) {
             return new JsonResponse(['mensagem' => $e->getMessage()], 500);
         }
     }
 
-    private function validaVeiculoCreate($request)
+    private function validaAgendamentoCreate($request)
     {
         try {
             $validator = new Validator();
             $validator->setData($request);
-            $validator->exists('veiculoNome');
-            $validator->not('veiculoNome', 'null');
-            $validator->not('veiculoNome', 'empty');
+            $validator->exists('nome');
+            $validator->not('nome', 'null');
+            $validator->not('nome', 'empty');
+            $validator->exists('email');
+            $validator->not('email', 'null');
+            $validator->not('email', 'empty');
+            $validator->exists('telefone');
+            $validator->not('telefone', 'null');
+            $validator->not('telefone', 'empty');
 
             $agendamento = new Agendamento();
             $agendamento->veiculoId = $request->veiculoId;
             $agendamento->name = $request->nome;
             $agendamento->email = $request->email;
-            $agendamento->dataHora = $request->dataHora;
+            $data = new \Datetime($request->dataHora);
+            $agendamento->dataHora = $data->format('Y-m-d H:i:s');
             $agendamento->telefone = $request->telefone;
             return $agendamento;
         } catch (Exception $e) {

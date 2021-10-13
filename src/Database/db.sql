@@ -15,7 +15,7 @@ CREATE TABLE Agendamento (
     datahora timestamp,
     nome varchar(255),
     email varchar(255),
-    telefone int,
+    telefone varchar(20),
     veiculoId bigint,
     CONSTRAINT PK_Agendamento PRIMARY KEY (ID),
     CONSTRAINT FK_AgendamentoVeiculo FOREIGN KEY (veiculoId) REFERENCES Veiculos (id)

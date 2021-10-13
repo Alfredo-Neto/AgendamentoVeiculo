@@ -10,6 +10,9 @@ class Agendamento implements JsonSerializable
     protected $dataHora;
     protected $veiculoId;
     protected $veiculo;
+    protected $name;
+    protected $email;
+    protected $telefone;
 
     public function jsonSerialize () {
         return [
