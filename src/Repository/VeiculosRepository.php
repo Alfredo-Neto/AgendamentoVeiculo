@@ -49,6 +49,11 @@ class VeiculosRepository {
         $statement->bindValue(":preco", $veiculo->preco);
         $statement->bindValue(":local", $veiculo->local);
         $statement->execute();
+
+        $id = $pdo->lastInsertId();
+
+        $veiculo->id = $id;
+        return $veiculo;
     }
 
     public function update($veiculo)
